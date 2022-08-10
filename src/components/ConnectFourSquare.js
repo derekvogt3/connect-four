@@ -16,7 +16,7 @@ export default function ConnectFourSquare({
     }
   }
 
-  function checkWinner(row, col) {
+  function checkWinner(row, col, board) {
     let counter = 1;
     let checkArray = [
       [-1, -1],
@@ -26,12 +26,19 @@ export default function ConnectFourSquare({
     ];
 
     checkArray.forEach((val) => {
-      initialWinCheck(counter, row, col, val[0], val[1]);
+      initialWinCheck(counter, row, col, val[0], val[1], board);
     });
   }
 
-  function initialWinCheck(counter, row, col, checkArrayRow, checkArrayCol) {
-    let secondCounter = 0;
+  function initialWinCheck(
+    counter,
+    row,
+    col,
+    checkArrayRow,
+    checkArrayCol,
+    board
+  ) {
+    let secondCounter = 1;
     if (counter === 4) {
       setisWinner(true);
     }
@@ -42,20 +49,35 @@ export default function ConnectFourSquare({
     if (newRow >= 0 && newRow < 6 && newCol >= 0 && newCol < 7) {
       if (board[newRow][newCol] === currentPlayer) {
         counter += 1;
-        initialWinCheck(counter, newRow, newCol, checkArrayRow, checkArrayCol);
-      } else {
-        secondaryWinCheck(
-          secondCounter,
+        initialWinCheck(
+          counter,
           newRow,
           newCol,
           checkArrayRow,
-          checkArrayCol
+          checkArrayCol,
+          board
+        );
+      } else {
+        secondaryWinCheck(
+          secondCounter,
+          row,
+          col,
+          checkArrayRow,
+          checkArrayCol,
+          board
         );
       }
     }
   }
 
-  function secondaryWinCheck(counter, row, col, checkArrayRow, checkArrayCol) {
+  function secondaryWinCheck(
+    counter,
+    row,
+    col,
+    checkArrayRow,
+    checkArrayCol,
+    board
+  ) {
     if (counter === 4) {
       setisWinner(true);
     }
@@ -71,26 +93,26 @@ export default function ConnectFourSquare({
           newRow,
           newCol,
           checkArrayRow,
-          checkArrayCol
+          checkArrayCol,
+          board
         );
       }
     }
   }
 
   function turn() {
+    let tempBoard = [...board];
     for (let i = 5; i >= 0; --i) {
       if (board[i][colIdx] === "") {
-        setboard((board) => {
-          board[i][colIdx] = currentPlayer;
-          return board;
-        });
+        tempBoard[i][colIdx] = currentPlayer;
+        setboard(tempBoard);
 
         if (currentPlayer === "X") {
           setCurrentPlayer("O");
         } else {
           setCurrentPlayer("X");
         }
-        checkWinner(i, colIdx);
+        checkWinner(i, colIdx, tempBoard);
 
         return;
       }
