@@ -1,7 +1,7 @@
 import React from "react";
 import "../styles.css";
 import ConnectFourSquare from "./ConnectFourSquare";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function ConnectFour() {
   const [board, setboard] = useState([
